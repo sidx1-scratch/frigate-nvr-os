@@ -24,9 +24,9 @@ Steps to reproduce the behavior:
 
 ## System Logs & Error Output
 If possible, please share relevant logs from Frigate or the Buildroot system console:
-\`\`\`text
+```text
 Paste your logs here
-\`\`\`
+```
 
 ## Additional Context
 Add any other context about the problem here (e.g., specific camera resolutions, codecs used).
