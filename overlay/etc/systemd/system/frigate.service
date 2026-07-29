@@ -1,0 +1,28 @@
+[Unit]
+Description=Frigate NVR Container
+After=docker.service
+Requires=docker.service
+
+[Service]
+Restart=always
+TimeoutStartSec=0
+ExecStartPre=-/usr/bin/docker stop frigate
+ExecStartPre=-/usr/bin/docker rm frigate
+# THIS LINE INSURES AN EDITABLE FILE EXISTS SO THE OS DOES NOT CRASH
+ExecStartPre=/usr/bin/mkdir -p /opt/frigate/config
+ExecStartPre=/usr/bin/touch /opt/frigate/config/config.yml 
+ExecStartPre=/usr/bin/docker pull ghcr.io/blakeblackshear/frigate:stable
+ExecStart=/usr/bin/docker run --name frigate \
+  --privileged \
+  --restart unless-stopped \
+  --shm-size=64mb \
+  -v /etc/localtime:/etc/localtime:ro \
+  -v /opt/frigate/config:/config \
+  -v /opt/frigate/storage:/media/frigate \
+  --mount type=tmpfs,target=/tmp/cache,tmpfs-size=1000000000 \
+  -p 8971:8971 \
+  -p 5000:5000 \
+  ghcr.io/blakeblackshear/frigate:stable
+
+[Install]
+WantedBy=multi-user.target
